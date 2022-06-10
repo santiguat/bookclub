@@ -30,6 +30,10 @@ var UserSchema = new Schema({
 	},
 	lastAccess: {
 		type: Date
+	},
+	clubs: {
+		type: [{ type: [Schema.Types.ObjectId], ref: 'Club' }],
+		default: [],
 	}
 });
 

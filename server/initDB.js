@@ -16,6 +16,7 @@ module.exports.init = async function() {
 async function createDefaultClubs() {
     for(var i=1; i<=100; i++) {
         var club = new Club();
+        club.id = i;
         club.name = "Club " + i;
         club.image = "https://source.unsplash.com/random/400x600?sig="+i;
         await club.save();

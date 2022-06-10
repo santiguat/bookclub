@@ -1,6 +1,7 @@
 ﻿export class Club {
-  id: string;
+  _id: string;
   text: string;
   image: string;
   created: Date;
+  isFollowed?: boolean;
 }

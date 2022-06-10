@@ -1,4 +1,6 @@
-﻿export class User {
+﻿import { Club } from './club';
+
+export class User {
     id: string;
     username: string;
     password: string;

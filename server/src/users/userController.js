@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Club = mongoose.model('Club');
 
 module.exports.authenticate = function(req, res) {
     User.findOne({username: req.body.username, password: req.body.password})

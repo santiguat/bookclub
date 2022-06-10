@@ -6,15 +6,21 @@
 </div>
 
 <div class="content" role="main">
-  <ng-container *ngFor="let club of clubs$ | async">
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" [src]="card.image" [alt]="card.name">
-      <div class="card-body">
-        <h5 class="card-title">{{card.name}}</h5>
-        <a href="#" class="btn btn-primary">Follow</a>
+  <div class="clubs">
+    <ng-container *ngFor="let club of clubs">
+      <div class="card clubs-item">
+        <img class="card-img-top clubs-item-img-placeholder" [src]="club.image" [alt]="club.name">
+        <div class="card-body">
+          <h5 class="card-title">{{club.name}}</h5>
+          <a href="#" class="btn btn-primary" (click)="onFollowChange(club._id, club.isFollowed)">{{ club.isFollowed ? 'Unfollow' : 'Follow'}}</a>
+        </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  </div>
+
+  <div>
+    <button class="btn btn-primary" (click)="onLoadMore()">Load more</button>
+  </div>
 
   <svg
     id="clouds"

@@ -1,12 +1,13 @@
 :host {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;
   color: #333;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-  
+
 h1,
 h2,
 h3,
@@ -51,59 +52,63 @@ p {
   overflow: hidden;
 
   h1 {
-      color: #16a596;
+    color: #16a596;
   }
 
   .blockquote-wrapper {
-      display:inline-block;
-      font-family:sans-serif;
-      margin:3em;
-      max-width:24em;
-      .blockquote {
-        display:inline-block;
-        margin:0;
-        padding:1em;
-        position:relative;
-        &:before {
-          color:#f90;
-          content:"\201C";
-          font-size:4em;
-          left:0;
-          line-height:.75em;
-          position:absolute;
-          top:0;
-          transform:scale(2, 8);
-          transform-origin:top;
-        }
-        &:after {
-          color:#f90;
-          content:"\201D";
-          font-size:4em;
-          line-height:.75em;
-          position:absolute;
-          right:0;
-          top:0;
-          transform:scale(2, 8);
-          transform-origin:top;
-        }
-        > * {
-          padding:2em 2em;
-          color: #373a40;
-        }
+    display: inline-block;
+    font-family: sans-serif;
+    margin: 3em;
+    max-width: 24em;
+    .blockquote {
+      display: inline-block;
+      margin: 0;
+      padding: 1em;
+      position: relative;
+      &:before {
+        color: #f90;
+        content: "\201C";
+        font-size: 4em;
+        left: 0;
+        line-height: 0.75em;
+        position: absolute;
+        top: 0;
+        transform: scale(2, 8);
+        transform-origin: top;
+      }
+      &:after {
+        color: #f90;
+        content: "\201D";
+        font-size: 4em;
+        line-height: 0.75em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: scale(2, 8);
+        transform-origin: top;
+      }
+      > * {
+        padding: 2em 2em;
+        color: #373a40;
       }
     }
+  }
 
   svg#clouds {
-      position: fixed;
-      bottom: -160px;
-      left: -230px;
-      z-index: -10;
-      width: 1920px;
+    position: fixed;
+    bottom: -160px;
+    left: -230px;
+    z-index: -10;
+    width: 1920px;
   }
 }
 
-
-
+.alert {
+  z-index: 1;
+  // position: absolute;
+  // left: 50%;
+  // transform: translateX(-50%);
+}
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
