@@ -7,6 +7,18 @@
 
 <div class="content" role="main">
   <div class="clubs">
+    <p>
+      <button type="button" class="btn btn-outline-primary" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed">
+        Show followed clubs
+      </button>
+    </p>
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+      <div class="card">
+        <div class="card-body">
+          You can collapse this card by clicking Toggle
+        </div>
+      </div>
+    </div>
     <ng-container *ngFor="let club of clubs">
       <div class="card clubs-item">
         <img class="card-img-top clubs-item-img-placeholder" [src]="club.image" [alt]="club.name">
@@ -19,7 +31,7 @@
   </div>
 
   <div>
-    <button class="btn btn-primary" (click)="onLoadMore()">Load more</button>
+    <button *ngIf="total > clubs?.length" class="btn btn-primary" (click)="onLoadMore()">Load more</button>
   </div>
 
   <svg
@@ -39,3 +51,7 @@
     />
   </svg>
 </div>
+
+<ngb-toast class="toast" [autohide]="true">
+  I am a simple static toast.
+</ngb-toast>

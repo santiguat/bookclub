@@ -7,9 +7,16 @@ const User = mongoose.model('User');
 module.exports.list = function({query}, res) {
     const pageSize = query.pageSize ? parseInt(query.pageSize) : 0;
     const page = query.page ? parseInt(query.page) : 0;
+    let totalRecords;
+    Club.countDocuments().
+    then((total) => totalRecords = total);
+
     Club.find()
         .limit(pageSize * page)
-        .then(c => res.jsonp(c))
+        .then(clubs => res.json({
+            data: clubs,
+            totalRecords
+        }))
         .catch(error => res.status(500).send({message: error}));
 }
 
@@ -17,10 +24,11 @@ module.exports.listByUser = function({params, query}, res) {
     const pageSize = query.pageSize ? parseInt(query.pageSize) : 0;
     const page = query.page ? parseInt(query.page) : 0;
     const username = params.userId;
-    
+    console.log(pageSize * page)
     User.findOne({username})
         .limit(pageSize * page)
         .then(u => {
+            console.log(u)
             res.send(u.clubs);
         })
         .catch(error => res.status(500).send({message: error}));

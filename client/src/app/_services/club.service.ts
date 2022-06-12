@@ -4,7 +4,7 @@ import { Club } from '@app/_models/club';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 import { AccountService } from './account.service';
-import { ApiResponse } from '@app/_shared';
+import { ApiResponse, PaginationResponse } from '@app/_shared';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,8 +15,8 @@ export class ClubService {
     this.currentUsername = this.accountService.userValue.username;
    }
 
-  getClubs(page: number, pageSize: number): Observable<Club[]> {
-    return this.http.get<Club[]>(`${environment.apiUrl}/clubs?page=${page}&pageSize=${pageSize}`);
+  getClubs(page: number, pageSize: number): Observable<PaginationResponse<Club[]>> {
+    return this.http.get<PaginationResponse<Club[]>>(`${environment.apiUrl}/clubs?page=${page}&pageSize=${pageSize}`);
   }
 
   getClubsByUser(page?: number, pageSize?: number): Observable<string[]> {

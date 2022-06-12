@@ -5,7 +5,7 @@ import { User } from '@app/_models';
 import { Club } from '@app/_models/club';
 import { AccountService, AlertService } from '@app/_services';
 import { ClubService } from '@app/_services/club.service';
-import { ApiResponse } from '@app/_shared';
+import { ApiResponse, PaginationResponse } from '@app/_shared';
 import { forkJoin, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -17,7 +17,10 @@ export class HomeComponent implements OnInit {
   user: User;
   clubs$: Observable<Club[]>;
   clubs = [];
+  userClubs = [];
   currentPage = 1;
+  total: number;
+  isCollapsed: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -42,32 +45,29 @@ export class HomeComponent implements OnInit {
   }
 
   onFollowChange(id: string, isAlreadyFollowed: boolean) {
-    if (isAlreadyFollowed) {
-      this.clubService.unsubscribeUser(id).subscribe(({message}: ApiResponse) => {
-         this.alertService.success(message, {autoClose: true});
-      });
-    } else {
-      this.clubService.subscribeUser(id).subscribe(({message}: ApiResponse) => {
-         this.alertService.success(message, {autoClose: true});
-      });
-    }
+    const subscriptionChange$ = isAlreadyFollowed ? this.clubService.unsubscribeUser(id) : this.clubService.subscribeUser(id);
+    subscriptionChange$.subscribe(({ message }: ApiResponse) => {
+      this.alertService.success(message, { autoClose: true });
+    });
 
     const clubIndex = this.clubs.map((c: Club) => c._id).indexOf(id);
 
     const scrollPosition = this.scroller.getScrollPosition()
-    this.clubs[clubIndex].isFollowed = !isAlreadyFollowed; 
+    this.clubs[clubIndex].isFollowed = !isAlreadyFollowed;
 
     // workaround to keep scroll fixed when mutating
     // this.clubs, after chaning follow state
     setTimeout(() => {
-        this.scroller.scrollToPosition(scrollPosition);
+      this.scroller.scrollToPosition(scrollPosition);
     });
   }
 
   private getClubs(): void {
-    forkJoin([this.clubService.getClubs(this.currentPage, 15), this.clubService.getClubsByUser()])
-      .subscribe(([clubs, userClubs]: [Club[], string[]]) => {
-        this.clubs = clubs.map((club: Club) => ({
+    forkJoin([this.clubService.getClubs(this.currentPage, 20), this.clubService.getClubsByUser()])
+      .subscribe(([{data, totalRecords}, userClubs]: [PaginationResponse<Club[]>, string[]]) => {
+        this.total = totalRecords;
+        this.userClubs = data.filter((club: Club) => userClubs.includes(club._id));
+        this.clubs = data.map((club: Club) => ({
           ...club,
           isFollowed: !!userClubs.find(
             (clubId: string) => clubId === club._id
