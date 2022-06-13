@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import {AppComponent} from './app.component';
-import { AlertComponent } from './_components';
+import { AlertComponent, ToastComponent } from './_components';
 import { HomeComponent } from './home';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -13,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     AppComponent,
     AlertComponent,
+    ToastComponent,
     HomeComponent,
   ],
   imports: [

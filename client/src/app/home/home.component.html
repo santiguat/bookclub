@@ -6,32 +6,44 @@
 </div>
 
 <div class="content" role="main">
+  <div class="clubs-btn">
+    <button
+      *ngIf="userClubs.length"
+      type="button"
+      class="btn btn-dark mt-1"
+      (click)="collapse.toggle()"
+      [attr.aria-expanded]="!isCollapsed"
+    >
+      Followed clubs
+      <img [ngClass]="{'rotated': isCollapsed}" class="clubs-btn-icon" src="/assets/icons/down.svg">
+    </button>
+  </div>
   <div class="clubs">
-    <p>
-      <button type="button" class="btn btn-outline-primary" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed">
-        Show followed clubs
-      </button>
-    </p>
     <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-      <div class="card">
-        <div class="card-body">
-          You can collapse this card by clicking Toggle
-        </div>
+      <div class="clubs-list followed">
+        <ng-container
+          *ngTemplateOutlet="
+            clubsList;
+            context: { $implicit: userClubs, showImg: false }
+          "
+        ></ng-container>
       </div>
     </div>
-    <ng-container *ngFor="let club of clubs">
-      <div class="card clubs-item">
-        <img class="card-img-top clubs-item-img-placeholder" [src]="club.image" [alt]="club.name">
-        <div class="card-body">
-          <h5 class="card-title">{{club.name}}</h5>
-          <a href="#" class="btn btn-primary" (click)="onFollowChange(club._id, club.isFollowed)">{{ club.isFollowed ? 'Unfollow' : 'Follow'}}</a>
-        </div>
-      </div>
-    </ng-container>
+    <div class="clubs-list pt-2">
+      <ng-container
+        *ngTemplateOutlet="clubsList; context: { $implicit: clubs, showImg: true }"
+      ></ng-container>
+    </div>
   </div>
 
   <div>
-    <button *ngIf="total > clubs?.length" class="btn btn-primary" (click)="onLoadMore()">Load more</button>
+    <button
+      *ngIf="total > clubs?.length"
+      class="btn btn-primary"
+      (click)="onLoadMore()"
+    >
+      Load more
+    </button>
   </div>
 
   <svg
@@ -52,6 +64,25 @@
   </svg>
 </div>
 
-<ngb-toast class="toast" [autohide]="true">
-  I am a simple static toast.
-</ngb-toast>
+<app-toast></app-toast>
+
+<ng-template #clubsList let-clubs let-img="showImg">
+  <div *ngFor="let club of clubs" class="card clubs-item">
+    <img
+      *ngIf="img"
+      class="card-img-top clubs-item-img-placeholder"
+      [src]="club.image"
+      [alt]="club.name"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ club.name }}</h5>
+      <a
+        href="#"
+        class="btn"
+        [ngClass]="!club.isFollowed ? 'btn-outline-success' : 'btn-outline-danger'"
+        (click)="onFollowChange(club._id, club.isFollowed)"
+        >{{ club.isFollowed ? "Unfollow" : "Follow" }}</a
+      >
+    </div>
+  </div>
+</ng-template>

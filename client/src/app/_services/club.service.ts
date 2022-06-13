@@ -19,9 +19,9 @@ export class ClubService {
     return this.http.get<PaginationResponse<Club[]>>(`${environment.apiUrl}/clubs?page=${page}&pageSize=${pageSize}`);
   }
 
-  getClubsByUser(page?: number, pageSize?: number): Observable<string[]> {
+  getClubsByUser(page?: number, pageSize?: number): Observable<Club[]> {
     const pagination = `page=${page}&pageSize=${pageSize}`
-    return this.http.get<string[]>(`${environment.apiUrl}/clubs/${this.currentUsername}${page ? pagination : ''}`);
+    return this.http.get<Club[]>(`${environment.apiUrl}/clubs/${this.currentUsername}${page ? pagination : ''}`);
   }
 
   subscribeUser(clubId: string): Observable<ApiResponse> {

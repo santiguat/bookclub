@@ -7,28 +7,25 @@ const User = mongoose.model('User');
 module.exports.list = function({query}, res) {
     const pageSize = query.pageSize ? parseInt(query.pageSize) : 0;
     const page = query.page ? parseInt(query.page) : 0;
-    let totalRecords;
-    Club.countDocuments().
-    then((total) => totalRecords = total);
 
-    Club.find()
-        .limit(pageSize * page)
-        .then(clubs => res.json({
-            data: clubs,
-            totalRecords
-        }))
-        .catch(error => res.status(500).send({message: error}));
+    Promise.all([ Club.countDocuments(), Club.find()
+        .limit(pageSize * page)]).
+        then(([totalRecords, clubs]) => {
+            return res.json({
+                data: clubs,
+                totalRecords
+            })
+        })
 }
 
 module.exports.listByUser = function({params, query}, res) {
     const pageSize = query.pageSize ? parseInt(query.pageSize) : 0;
     const page = query.page ? parseInt(query.page) : 0;
     const username = params.userId;
-    console.log(pageSize * page)
     User.findOne({username})
+        .populate('clubs')
         .limit(pageSize * page)
         .then(u => {
-            console.log(u)
             res.send(u.clubs);
         })
         .catch(error => res.status(500).send({message: error}));
@@ -47,7 +44,7 @@ module.exports.subscribeUser = function(req, res) {
         })
         .then(() => Club.findById(clubId))
         .then(u => {
-            res.send({message: `You have subscripted to ${u.name} successfully!`})
+            res.send({message: `You are now following ${u.name}!`})
         }).catch(err => {
             res.status(500).send({message: err});
         });
@@ -63,13 +60,12 @@ module.exports.unsubscribeUser = function(req, res) {
         .then(u => {
             const club = u.clubs.find(c => c._id.toString() === clubId);
             if(!club){
-                console.log('hello');
-                throw `You are not subscribed to ${c.name}!`;
+                throw `You are not following ${c.name}!`;
             }
             return User.updateOne({username}, {$pull: {clubs: clubId}});
         })
         .then(() => {
-            res.send({message: `You have unsubscripted from ${c.name} successfully!`})
+            res.send({message: `You stopped following ${c.name}`})
         }).catch(err => {
             res.status(500).send({message: err});
         });
